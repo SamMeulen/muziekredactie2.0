@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM gradle:8-jdk-20 AS build
+FROM gradle:8.2-jdk-20 AS build
 COPY src .
 RUN mvn clean package -DskipTests
 
