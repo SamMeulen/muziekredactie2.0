@@ -1,15 +1,13 @@
-#
-# Build stage
-#
-FROM maven:3.8.2-jdk-11 AS build
-COPY . .
-RUN mvn clean package
-
-#
-# Package stage
-#
-FROM openjdk:11-jdk-slim
-COPY --from=build /target/muziekredactie-0.0.1-SNAPSHOT.jar muziekredactie.jar
-# ENV PORT=8080
+FROM gradle:jdk8-alpine
+VOLUME gradle-cache:/home/gradle/.gradle
+VOLUME /tmp
+USER root
+ADD . /home/gradle/project
+WORKDIR /home/gradle/project
+RUN chown gradle:gradle -R /home/gradle
+USER gradle
+RUN gradle bootJar
+#Start from a java:8
+RUN mv /home/gradle/project/build/libs/*.jar /home/gradle/project/app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","muziekredactie.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-Djava.security.egd=file:/dev/./urandom","-jar","/home/gradle/project/app.jar"]
