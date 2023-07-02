@@ -1,4 +1,4 @@
-FROM gradle:jdk8-alpine
+FROM gradle:jdk17-alpine
 VOLUME gradle-cache:/home/gradle/.gradle
 VOLUME /tmp
 USER root
