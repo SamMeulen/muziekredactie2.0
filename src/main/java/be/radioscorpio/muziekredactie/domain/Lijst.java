@@ -4,6 +4,6 @@ import java.util.List;
 
 public class Lijst {
 
-    String id;
+    String lijstId;
     List<LijstItem> lijstItems;
 }
