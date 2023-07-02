@@ -1,15 +1,15 @@
 #
 # Build stage
 #
-FROM gradle:4.7.0-jdk8-alpine AS build
-COPY src .
+FROM maven:3.8.2-jdk-11 AS build
+COPY . .
 RUN mvn clean package -DskipTests
 
 #
 # Package stage
 #
-FROM openjdk:8-alpine
-COPY --from=build /target/demo-0.0.1-SNAPSHOT.jar demo.jar
+FROM openjdk:11-jdk-slim
+COPY --from=build /target/muziekredactie-0.0.1-SNAPSHOT.jar muziekredactie.jar
 # ENV PORT=8080
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","demo.jar"]
+ENTRYPOINT ["java","-jar","muziekredactie.jar"]
